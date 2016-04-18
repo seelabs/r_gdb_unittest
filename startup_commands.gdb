@@ -61,16 +61,13 @@ for b in to_brk:
     exp_ex_break.BExpEx (b)
 
 def exit_handler(event):
-    import time
     import gdb
-    gdb.write("Finished Run. Restaring in 5 seconds...")
-    time.sleep(5)
-    gdb.parse_and_eval("run")
+    gdb.execute("quit")
 
 gdb.events.exited.connect(exit_handler)
 end
 
-# r
+r
 
 # while ($_exitcode != -999)
 #    set $_exitcode = -999
