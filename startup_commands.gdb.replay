@@ -1,0 +1,39 @@
+tty /home/swd/gdb/flow/debug_output.txt
+
+set print static-members off
+
+# Fixed output more than requested
+# set args --fg --conf /home/swd/.rippled/rippled.cfg --ledger 2CF7AD29849945730F2E6BC099F53868DD91EB4F3A942DC06154E9C9B9AA0D50 --replay
+
+# unfixed - old: partial, new: succ
+# set args --fg --conf /home/swd/.rippled/rippled.cfg --ledger 281727F6E0056B4F7613BD88E847D84DEFB8A0C113ECCF4063F60E8FAE0B12A3 --replay
+# set print static-members off
+
+# old: succ, new: tef
+# set args --fg --conf /home/swd/.rippled/rippled.cfg --ledger FF0BD6F48A40AB74CE5BED6A253165123750D0E4274D76E6F6BEA0E8C0610A42 --replay
+
+# Fixed old: noRipple new: dry
+# set args --fg --conf /home/swd/.rippled/rippled.cfg --ledger 01AF6390CFA93FBBBB8C75D3B7CE577DE005C7586515178C5ACD6449C0E9AFB9 --replay
+
+set args --fg --conf /home/swd/.rippled/rippled.cfg --ledger 942B134021C95C7D63FC8B57D3F7BFDEB772C9369CF9E9E89F800DF0A933D2A9 --replay
+
+# for easily printing collections
+set $i=0
+
+b Payment.cpp:359
+condition $bpnum ctx_.tx.getTransactionID().pn[0]==3395287976
+r
+
+# start of old flow
+b RippleCalc.cpp:102
+# start of new flow
+b RippleCalc.cpp:141
+
+#when old and new results disagree
+b RippleCalc.cpp:165
+set $ond=$bpnum
+catch throw
+b PaySteps.cpp:203
+b PaySteps.cpp:367
+condition $bpnum i==3
+c 

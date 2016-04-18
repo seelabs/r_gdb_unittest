@@ -1,0 +1,27 @@
+tty /home/swd/gdb/flow/debug_output.txt
+
+# set args --unittest=Flow
+set args -av --conf /home/swd/gdb/flow/rippled.cfg
+set print static-members off
+
+# for easily printing collections
+set $i=0
+
+#break on runner::fail (unittest failure)
+b runner.h:325
+set $f=$bpnum
+
+#when old and new results disagree
+b RippleCalc.cpp:151
+set $ond=$bpnum
+# b RippleCalc.cpp:78
+
+
+b RippleCalc.cpp:78
+set $rc=$bpnum
+# ignore $bpnum 8
+r
+dis $rc
+b PaySteps.cpp:409
+b PaySteps.cpp:412
+c
